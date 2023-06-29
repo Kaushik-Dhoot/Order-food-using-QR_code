@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Bill{% endblock title %}
+
+{%block body%}
+
+{% for message in messages %}
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+<div class="container col-md-6">
+    <div style="display:grid;place-content:center; padding-top:25px">
+        <h3>All Bills : </h3>
+      </div>
+    {% for b in bills %}
+  
+  <table class="table table-bordered border-dark">
+  <thead>
+    <tr>
+      <th>Item name</th>
+      <th>Qty</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item, values in b.order_items.items %}
+    <tr>
+      <td>{{ item }}</td>
+      <td>{{ values.0 }}</td>
+      <td>{{ values.1 }}</td>
+    </tr>
+    {% endfor %}
+    <div style='padding:50px 0px 10px'>
+    <hr>
+  <h5> Invoice number : {{b.id}}</h5>
+  <h5> Invoice time : {{b.bill_time}}</h5>
+    {% if b.name != "Unknown" %}
+    <h5>Name: {{ b.name }}</h5>
+    <h5>Phone: {{ b.phone }}</h5>
+{% endif %}
+    <h5>Bill Total : {{ b.bill_total }}</h5>
+    </div>
+    {% endfor %}
+  </tbody>
+</table>
+
+  </div>
+</div>
+
+
+{%endblock body%}
+
+{% block js %}
+<script>
+
+</script>
+
+
+{%endblock js%}

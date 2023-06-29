@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart
+{% endblock title %}
+
+{% block body %}
+
+{% for message in messages %}
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+<!-- <h1>Cart Page</h1> -->
+
+<div class="container py-2 ">
+  <h2>Review your order</h2>
+  <div class='col c_cart'  >
+  <form method='post' action='/cart'>
+    {% csrf_token %}
+    <input type='hidden' name="items_json" id="itemsjson">
+    <input type="hidden" id="tableValueInput" name='table_value' >
+  <div class='my-4'>
+
+    <ul class="list-group " id='items'>
+  
+    </ul>
+    <ul class="list-group" style="padding:10px 15px 10px" >
+    <b><li class="d-flex justify-content-end align-items-center" >Total = 
+      <input type="hidden" name="price" id='price_input' >
+      <span class="" id='total'>0 </span>
+      </li>
+      </b>
+    </ul>
+    
+  </div>
+    <button type='submit'  class="btn btn-primary" style="margin:5px;" >Place Order</button>
+    <button class="btn btn-primary clear_cart" style="margin:5px;" >Clear cart</button>
+    <a href='/'  class="btn btn-primary" style="margin:5px;" >Add More items</a>
+    </form>
+  </div>
+</div>
+
+
+
+{% endblock body %}
+
+{%block js%}
+
+<script>
+  if (localStorage.getItem('cart')==null){
+    var cart={};
+  }
+  else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  // console.log(cart);
+
+  if ($.isEmptyObject(cart)){
+    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+    Your Cart is empty Plese add some items!!
+    <span class="badge bg-primary rounded-pill"></span>
+  </li>`
+    $('#items').append(mystr);
+  }
+  else{
+  let total_price = 0
+  for (item in cart){
+    let name = cart[item][1];
+    let qty = cart[item][0];
+    let item_price = cart[item][2];
+    total_price = total_price + qty*item_price
+    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+    ${name}
+    <span class="badge bg-primary rounded-pill">${qty}</span>
+  </li>`
+    $('#items').append(mystr);
+    
+  }
+    // console.log(total_price)
+    document.getElementById('total').innerHTML = total_price
+    $('#price_input').val(JSON.stringify(total_price));
+
+  }
+
+$('#itemsjson').val(JSON.stringify(cart));
+
+  $('.clear_cart').click(function (event) {
+    event.preventDefault();
+    localStorage.removeItem('cart');
+    $('#items').empty();
+    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+    Your Cart is empty. Please add some items!!
+    <span class="badge bg-primary rounded-pill"></span>
+  </li>`;
+    $('#items').append(mystr);
+  });
+
+function clearLocalStorage() {
+    localStorage.removeItem('cart');
+  }
+
+  $('form').submit(function () {
+    clearLocalStorage();
+    
+  });
+
+  var tableValue = localStorage.getItem('tableValue');      
+  document.getElementById('tableValueInput').value = tableValue;
+
+  $('form').submit(function () {
+  document.location= '/';
+  });
+  
+</script>
+
+{%endblock js%}

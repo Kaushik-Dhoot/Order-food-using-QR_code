@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}My_orders
+{% endblock title %}
+
+{% block body %}
+
+{% for message in messages %}
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+
+<!-- <h1>My_orders Page</h1> -->
+<h2 style="padding-top:25px;
+  display:grid;
+  place-items:center;" > Your Orders </h2>
+
+<div style="padding: 15px 50px 15px">
+
+  {% for table, orders in order_by_table.items %}
+
+  <div style="padding: 15px 5px 15px">
+    <hr>
+
+    {% for o in orders %}
+
+    <h5><p>Order Time: {{ o.order_time }}</p></h5>
+
+     {% for item_key, item_values in o.items_json.items %}
+    <b><p>{{ item_values.1 }} : {{ item_values.0 }}</p></b>
+    {% endfor %}
+
+    <b><p> Total : {{o.price}}</p></b>
+    <hr>
+
+    {% endfor %}
+
+  {% endfor %}
+
+  </div>
+
+</div>
+
+{% endblock body %}

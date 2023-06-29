@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Reviews
+{% endblock title %}
+
+{% block body %}
+
+<!-- <h1>Reviews Page</h1> -->
+
+{% if user.is_authenticated %}
+<div class='container py-4 col-md-8' >
+
+    <h3 class='text-center mb-3'>Write a review</h3>
+
+    <form method='POST'  action='/reviews' class='row g-12' style ='display:flex; justify-content:center; align-items : center;'>
+      {% csrf_token %}
+      <div class="form-floating mb-3 col-md-6">
+        <input type="text" name='comment' id="form3Example3c" placeholder='Add a comment' class="form-control" maxlength='250' />
+        <label class="form-label" for="form3Example3c">Comment</label>
+        
+      </div>
+      <button type='submit' class='btn btn-primary col-md-2'>Publish</button>
+      
+    </form>
+    
+</div>
+{% endif %}
+<div class="container" style="padding: 5px;" >
+  <h2>Reviews :</h2>
+</div>
+
+{% for r in reviews%}
+  <div class="review" style="border: 2px solid black; margin: 5px 100px 50px; padding: 10px;">
+    
+    <h4 ><b>{{r.name}}</b></h4>
+    <h5 >{{r.comment}}</h5>
+    <h6 >{{r.created_at}}</h6>
+
+  </div>
+{% endfor %}
+
+{% endblock body %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}All Orders
+{% endblock title %}
+
+{% block body %}
+
+<div style="padding: 15px 50px 15px">
+
+  {% for table, orders in order_by_table.items %}
+
+  <div style="padding: 15px 5px 15px">
+    
+    {% if table == 'Take Away' %}
+    <h3>{{ table }}</h3>
+    {% else %}
+    <h3>Table No : {{table}}</h3>
+    {% endif %}
+    <hr>
+    <hr>
+
+    {% for o in orders %}
+
+    <h5><p>Order Time: {{ o.order_time }}</p></h5>
+
+     {% for item_key, item_values in o.items_json.items %}
+    <b><p>{{ item_values.1 }} : {{ item_values.0 }}</p></b>
+    {% endfor %}
+    <b><p>Total : {{o.price}}</p></b>
+
+    <p>Name: {{ o.name }}</p>
+      {% if not o.bill_clear %}
+      <button onclick="generateBill('{{table}}')">Generate Bill</button>
+      {%else%}
+      <b><h5>Bill Cleared</h5></b>
+      {% endif %}
+    <hr>
+    {% endfor %}
+
+    <hr>
+
+  {% endfor %}
+
+  </div>
+
+</div>
+{% endblock body %}
+
+
+{%block js%}
+
+<script>
+  function generateBill(table) {
+    window.location.href = '/generate_bill?table=' + table;
+  }
+</script>
+
+{%endblock js%}

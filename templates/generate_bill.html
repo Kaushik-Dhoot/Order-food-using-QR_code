@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Bill{% endblock title %}
+
+{%block body%}
+
+{% for message in messages %}
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+<div class="container col-md-6">
+    <div style="display:grid;place-content:center; padding-top:50px">
+        <h3>Bill No : {{inv_id}} </h3>
+{% if name != "Unknown" %}
+    <h5>Name: {{ name }}</h5>
+    <h5>Phone: {{ phone }}</h5>
+{% endif %}
+      </div>
+        <table class="table table-bordered border-dark">
+            <thead>
+              <tr>
+                <th>Item name</th>
+                <th>Qty</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for key, value in order_dict.items %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ value.0 }}</td>
+                    <td>{{ value.1 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <h3 style="display:grid ;place-items:end" >Bill Total: {{ bill_total }}</h3>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <button onclick="printBill()" class="btn btn-primary">Print Bill</button>
+  </div>
+</div>
+
+
+{%endblock body%}
+
+{% block js %}
+<script>
+    function printBill() {
+        window.print();
+    }
+</script>
+
+
+{%endblock js%}
